@@ -1,14 +1,30 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import dataJson from '../data.json'
 import Dessert from './Dessert'
 import Cart from './Cart'
+import Modal from './Modal'
 const App = () => {
   const [data, setData] = useState(dataJson)
-  const [cart, setCart] = useState([])
+  const [cart, setCart] = useState(() => {
+    const savedCart = localStorage.getItem('cart')
+    return savedCart ? JSON.parse(savedCart) : []
+  })
+ 
+
+  useEffect(() => {
+    localStorage.setItem('cart', JSON.stringify(cart))
+  }, [cart])
   const addToCart = dessert => {
     setCart([...cart, { ...dessert, quantity: 1 }])
   }
+  const [showModal, setShowModal] = useState(() => {
+    const savedModal = localStorage.getItem('showModal')
+    return savedModal === 'true'
+  })
 
+  useEffect(() => {
+    localStorage.setItem('showModal', showModal)
+  }, [showModal])
   const getCartItem = dessertName => {
     return cart.find(item => item.name === dessertName)
   }
@@ -35,6 +51,13 @@ const App = () => {
         .filter(item => item.quantity > 0)
     )
   }
+  const handleConfirmOrder = () => {
+    setShowModal(true)
+  }
+  const handleStartNewOrder = () => {
+    setCart([])
+    setShowModal(false)
+  }
   return (
     <div className="bg-rose-100 min-h-screen">
       <div className="max-w-3xl min-[1300px]:max-w-6xl mx-auto grid min-[1300px]:grid-cols-[2fr_1fr] p-9 gap-7">
@@ -57,14 +80,21 @@ const App = () => {
                   inCart={!!cartItem}
                   quantity={cartItem?.quantity || 0}
                   onDecreament={() => decreaseQuantity(dessert.name)}
-                  onIncreament={()=> increaseQuantity(dessert.name)}
+                  onIncreament={() => increaseQuantity(dessert.name)}
                 />
               )
             })}
           </section>
         </div>
-        <Cart cartItems={cart} deleteCartItem={deleteCartItem}/>
+        <Cart
+          cartItems={cart}
+          deleteCartItem={deleteCartItem}
+          handleConfirmOrder={handleConfirmOrder}
+        />
       </div>
+      {showModal && (
+        <Modal cartItems={cart} handleStartNewOrder={handleStartNewOrder} />
+      )}
     </div>
   )
 }

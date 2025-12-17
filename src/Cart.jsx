@@ -2,7 +2,7 @@ import React from 'react'
 import emptyCartIllustration from './assets/illustration-empty-cart.svg'
 import iconRemove from './assets/icon-remove-item.svg'
 import iconCarbonNeutral from './assets/icon-carbon-neutral.svg'
-const Cart = ({ cartItems, deleteCartItem }) => {
+const Cart = ({ cartItems, deleteCartItem, handleConfirmOrder }) => {
   const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0)
   const totalAmount = cartItems.reduce(
     (sum, item) => sum + item.quantity * item.price,
@@ -14,7 +14,6 @@ const Cart = ({ cartItems, deleteCartItem }) => {
         Your Cart ({totalItems})
       </h3>
       {cartItems.length === 0 ? (
-        // Show empty state when NO items ✅
         <div className="mt-10 flex items-center flex-col">
           <img src={emptyCartIllustration} alt="" />
           <p className="text-rose-500 font-bold text-sm mt-5">
@@ -22,7 +21,6 @@ const Cart = ({ cartItems, deleteCartItem }) => {
           </p>
         </div>
       ) : (
-        // Show cart items when there ARE items ✅
         <div>
           {cartItems.map((item, i) => (
             <article
@@ -64,7 +62,10 @@ const Cart = ({ cartItems, deleteCartItem }) => {
               delivery
             </p>
           </div>
-          <button className="text-rose-50 bg-red w-full rounded-full py-2 px-4 mt-4 cursor-pointer">
+          <button
+            className="text-rose-50 bg-red w-full rounded-full py-2 px-4 mt-4 cursor-pointer"
+            onClick={handleConfirmOrder}
+          >
             Confirm Order
           </button>
         </div>
