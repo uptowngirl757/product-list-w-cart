@@ -1,7 +1,7 @@
 import React from 'react'
 import iconCheck from './assets/icon-order-confirmed.svg'
 
-const Modal = ({ cartItems, handleStartNewOrder }) => {
+const Modal = ({ cartItems, handleStartNewOrder, setShowModal }) => {
   const totalAmount = cartItems.reduce(
     (sum, item) => sum + item.quantity * item.price,
     0
@@ -9,7 +9,7 @@ const Modal = ({ cartItems, handleStartNewOrder }) => {
 
   return (
     // Dark overlay - covers entire screen
-    <div className="fixed inset-0 bg-black/20 flex items-center justify-center z-50 p-4">
+    <div className="fixed inset-0 bg-black/20 flex items-center justify-center z-50 p-4" onClick={()=>setShowModal(false)}>
       {/* Modal content - centered white box */}
       <div className="bg-white rounded-lg p-8 max-w-md w-full max-h-[90vh] overflow-y-auto">
         <img src={iconCheck} alt="" className="w-12 h-12 mb-4" />

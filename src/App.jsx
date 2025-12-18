@@ -9,7 +9,6 @@ const App = () => {
     const savedCart = localStorage.getItem('cart')
     return savedCart ? JSON.parse(savedCart) : []
   })
- 
 
   useEffect(() => {
     localStorage.setItem('cart', JSON.stringify(cart))
@@ -93,7 +92,11 @@ const App = () => {
         />
       </div>
       {showModal && (
-        <Modal cartItems={cart} handleStartNewOrder={handleStartNewOrder} />
+        <Modal
+          cartItems={cart}
+          handleStartNewOrder={handleStartNewOrder}
+          setShowModal={setShowModal}
+        />
       )}
     </div>
   )
